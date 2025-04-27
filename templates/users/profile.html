@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block title %}Min Profil - EventHub{% endblock %}
+
+{% block content %}
+<h1 class="text-2xl font-bold mb-4">Min Profil</h1>
+
+<div class="card">
+    <h2 class="text-xl font-semibold">Brukerinformasjon</h2>
+    <p><strong>Navn:</strong> {{ current_user.name }}</p>
+    <p><strong>E-post:</strong> {{ current_user.email }}</p>
+</div>
+
+<div class="flex flex-col md:flex-row gap-8">
+    <div class="card flex-1">
+        <div class="flex justify-between items-center section-header">
+            <h2 class="text-xl font-semibold">Mine arrangementer</h2>
+            <a href="{{ url_for('events.create_event') }}" class="btn btn-blue">Opprett nytt arrangement</a>
+        </div>
+        
+        {% if user_events %}
+            {% for event in user_events %}
+            <div class="card">
+                <h3 class="text-lg font-medium">{{ event.name }}</h3>
+                <p>{{ event.date.strftime('%d.%m.%Y %H:%M') }} | {{ event.location }}</p>
+                <p>{{ event.description[:100] }}{% if event.description|length > 100 %}...{% endif %}</p>
+                <a href="{{ url_for('events.event_details', event_id=event.id) }}" class="btn btn-grey">Se detaljer</a>
+                <a href="{{ url_for('events.edit_event', event_id=event.id) }}" class="btn btn-blue">Rediger</a>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p>Du har ikke opprettet noen arrangementer ennå.</p>
+        {% endif %}
+    </div>
+
+    <div class="card flex-1">
+        <div class="section-header">
+            <h2 class="text-xl font-semibold">Mine påmeldinger</h2>
+        </div>
+        
+        {% if user_registrations %}
+            {% for event in user_registrations %}
+            <div class="card">
+                <h3 class="text-lg font-medium">{{ event.name }}</h3>
+                <p>{{ event.date.strftime('%d.%m.%Y %H:%M') }} | {{ event.location }}</p>
+                <p>{{ event.description[:100] }}{% if event.description|length > 100 %}...{% endif %}</p>
+                <p>Arrangør: {{ event.creator_name }}</p>
+                <a href="{{ url_for('events.event_details', event_id=event.id) }}" class="btn btn-grey">Se detaljer</a>
+                <a href="{{ url_for('events.unregister_event', event_id=event.id) }}" class="btn btn-red">Meld meg av</a>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p>Du er ikke påmeldt noen arrangementer ennå.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %} 

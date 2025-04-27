@@ -1,0 +1,17 @@
+{
+  "name": "eventhub",
+  "version": "1.0.0",
+  "description": "EventHub - Arrangementshåndteringsapp",
+  "main": "index.js",
+  "scripts": {
+    "build": "npx @tailwindcss/cli -i ./static/css/input.css -o ./static/css/output.css",
+    "watch": "npx @tailwindcss/cli -i ./static/css/input.css -o ./static/css/output.css --watch"
+  },
+  "dependencies": {
+    "@tailwindcss/cli": "^4.1.4",
+    "@tailwindcss/typography": "^0.5.16",
+    "tailwindcss": "^4.1.4"
+  },
+  "devDependencies": {
+  }
+}

@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}Logg inn - EventHub{% endblock %}
+
+{% block content %}
+<div class="flex justify-center items-center min-h-screen">
+    <div class="card">
+        <div>
+            <div class="form-card">
+                <form method="POST">
+                    {{ form.hidden_tag() }}
+                    <div class="form-group">
+                        <label class="form-label">{{ form.email.label }}</label>
+                        {{ form.email(class="form-input") }}
+                        {% if form.email.errors %}
+                            <div class="form-error">
+                                {% for error in form.email.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">{{ form.password.label }}</label>
+                        {{ form.password(class="form-input") }}
+                        {% if form.password.errors %}
+                            <div class="form-error">
+                                {% for error in form.password.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="form-actions">
+                        {{ form.submit(class="btn btn-blue") }}
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div>
+            Har du ikke en konto? <a href="{{ url_for('users.register') }}">Registrer deg</a>
+        </div>
+    </div>
+</div>
+{% endblock %} 

@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ event.name }} - EventHub{% endblock %}
+
+{% block content %}
+
+<div class="card">
+    <h1>{{ event.name }}</h1>
+    <p>Tid: {{ event.date.strftime('%d.%m.%Y %H:%M') }}</p>
+    <p>Sted: {{ event.location }}</p>
+    <p>Arrangør: {{ event.creator_name }}</p>
+</div>
+
+<div class="card">
+    <h2>Beskrivelse</h2>
+    {{ event.description }}
+</div>
+
+
+{% if event.registrations %}
+<div class="card">
+    <p>Antall påmeldte: {{ event.registrations|length }}</p>
+    <h3>Deltakere:</h3>
+    <ul>
+        {% for registration in event.registrations %}
+        <li>{{ registration.name }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% else %}
+<p>Ingen har meldt seg på dette arrangementet ennå.</p>
+{% endif %}
+
+<div class="mt-8">
+    <a href="{{ url_for('events.upcoming_events') }}" class="btn btn-grey">Tilbake</a>
+    
+    {% if current_user.is_authenticated %}
+        {% if current_user.id == event.user_id %}
+        <a href="{{ url_for('events.edit_event', event_id=event.id) }}" class="btn btn-blue">Rediger</a>
+        <button 
+            onclick="if(confirm('Er du sikker på at du vil slette dette arrangementet?')) { document.getElementById('delete-form').submit(); }" 
+            class="btn btn-red">
+            Slett
+        </button>
+        <form id="delete-form" action="{{ url_for('events.delete_event', event_id=event.id) }}" method="post"></form>
+        {% elif is_registered %}
+        <a href="{{ url_for('events.unregister_event', event_id=event.id) }}" class="btn btn-red">Meld meg av</a>
+        {% else %}
+        <a href="{{ url_for('events.register_event', event_id=event.id) }}" class="btn btn-blue">Meld meg på</a>
+        {% endif %}
+    {% endif %}
+</div>
+
+{% if not current_user.is_authenticated %}
+<div class="card">
+    <p>Logg inn for å melde deg på dette arrangementet.</p>
+    <div class="mt-4">
+        <a href="{{ url_for('events.upcoming_events') }}" class="btn btn-grey">Tilbake</a>
+        <a href="{{ url_for('users.login') }}" class="btn btn-blue">Logg inn</a>
+    </div>
+</div>
+{% endif %}
+{% endblock %} 
